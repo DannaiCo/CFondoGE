@@ -1,8 +1,8 @@
 <!DOCTYPE html> 
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="1800">
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="1800" />
   <title>Dedicatorias - Gran Estación</title>
   <style>
     * {
@@ -18,13 +18,13 @@
       position: relative;
       background: black;
     }
-    video#fondoVideo {
+    img#fondoImagen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: fill; /* Ajuste para llenar */
+      object-fit: cover; /* Ajusta la imagen para cubrir todo el fondo */
       z-index: -1;
     }
     .contenedor {
@@ -51,7 +51,7 @@
   </style>
 </head>
 <body>
-  <video id="fondoVideo" autoplay muted loop></video>
+  <img id="fondoImagen" alt="Fondo dedicatoria" />
 
   <div class="contenedor">
     <div id="de" class="de"></div>
@@ -63,16 +63,16 @@
     const BASE_URL = "https://dannaico.github.io/CFondoGE/";
     let dedicatorias = [];
     let index = 0;
-    const videoEl = document.getElementById("fondoVideo");
+    const imgEl = document.getElementById("fondoImagen");
     const deEl = document.getElementById("de");
     const paraEl = document.getElementById("para");
 
     const coloresPorFlor = {
-      "girasol.mp4": "#025100",
-      "rosa.mp4": "#4f0035",
-      "orquidea.mp4": "#004f40",
-      "margarita.mp4": "#4f3a00",
-      "clavel.mp4": "#000f4f"
+      "girasol.jpg": "#025100",
+      "rosa.jpg": "#4f0035",
+      "orquidea.jpg": "#004f40",
+      "margarita.jpg": "#4f3a00",
+      "clavel.jpg": "#000f4f"
     };
 
     async function cargarDatos() {
@@ -98,9 +98,8 @@
       const item = dedicatorias[index];
       deEl.textContent = item.de;
       paraEl.textContent = item.para;
-      videoEl.src = BASE_URL + item.fondo; // Ruta absoluta a GitHub Pages
-      videoEl.load();
-      videoEl.play();
+
+      imgEl.src = BASE_URL + item.fondo; // Ruta absoluta a GitHub Pages para imagen
 
       const color = coloresPorFlor[item.fondo.toLowerCase()] || "#ffffff";
       deEl.style.color = color;
@@ -113,4 +112,3 @@
   </script>
 </body>
 </html>
-
