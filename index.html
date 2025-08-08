@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="1800" />
-  <title>Dedicatorias - Feria de las Flores</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="1800">
+  <title>Dedicatorias - Gran Estación</title>
   <style>
     * {
       margin: 0;
@@ -14,23 +14,18 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: black;
       font-family: 'Arial', sans-serif;
       position: relative;
+      background: black;
     }
-    video.fondoVideo {
+    video#fondoVideo {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: fill; /* Requerido para Gran Estación */
+      object-fit: fill; /* Ajuste para llenar */
       z-index: -1;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    video.fondoVideo.activo {
-      opacity: 1;
     }
     .contenedor {
       width: 100%;
@@ -56,34 +51,19 @@
   </style>
 </head>
 <body>
-
-  <!-- VIDEOS PRE-CARGADOS -->
-  <video id="girasol" class="fondoVideo activo" autoplay muted playsinline loop>
-    <source src="girasol.mp4" type="video/mp4">
-  </video>
-  <video id="rosa" class="fondoVideo" autoplay muted playsinline loop>
-    <source src="rosa.mp4" type="video/mp4">
-  </video>
-  <video id="orquidea" class="fondoVideo" autoplay muted playsinline loop>
-    <source src="orquidea.mp4" type="video/mp4">
-  </video>
-  <video id="margarita" class="fondoVideo" autoplay muted playsinline loop>
-    <source src="margarita.mp4" type="video/mp4">
-  </video>
-  <video id="clavel" class="fondoVideo" autoplay muted playsinline loop>
-    <source src="clavel.mp4" type="video/mp4">
-  </video>
+  <video id="fondoVideo" autoplay muted loop></video>
 
   <div class="contenedor">
-    <div id="de" class="de">Cargando...</div>
-    <div id="para" class="para">dedicatorias</div>
+    <div id="de" class="de"></div>
+    <div id="para" class="para"></div>
   </div>
 
   <script>
     const URL = "https://script.google.com/macros/s/AKfycbzjWEco_1WTKoP82WQYxTDPrjVwE2SLwrzzr-760Ap2cingRJVBLBFolUJmoz0ZxKSf0w/exec";
+    const BASE_URL = "https://dannaico.github.io/CFondoGE/";
     let dedicatorias = [];
     let index = 0;
-
+    const videoEl = document.getElementById("fondoVideo");
     const deEl = document.getElementById("de");
     const paraEl = document.getElementById("para");
 
@@ -94,46 +74,6 @@
       "margarita.mp4": "#4f3a00",
       "clavel.mp4": "#000f4f"
     };
-
-    const videos = {
-      "girasol.mp4": document.getElementById("girasol"),
-      "rosa.mp4": document.getElementById("rosa"),
-      "orquidea.mp4": document.getElementById("orquidea"),
-      "margarita.mp4": document.getElementById("margarita"),
-      "clavel.mp4": document.getElementById("clavel")
-    };
-
-    function ocultarTodosLosVideos() {
-      Object.values(videos).forEach(video => video.classList.remove("activo"));
-    }
-
-    function mostrarDedicatoria() {
-      const item = dedicatorias[index];
-
-      // Normalizar nombre de fondo
-      let fondo = (item.fondo || "").trim().toLowerCase();
-      if (!fondo.endsWith(".mp4")) fondo += ".mp4";
-
-      // Asignar texto con protección por si faltan datos
-      deEl.textContent = item.de || "Sin remitente";
-      paraEl.textContent = item.para || "Sin destinatario";
-
-      // Mostrar video correspondiente
-      ocultarTodosLosVideos();
-      if (videos[fondo]) {
-        videos[fondo].classList.add("activo");
-      } else {
-        console.warn(`No se encontró video para: ${fondo}, usando girasol.mp4 por defecto`);
-        videos["girasol.mp4"].classList.add("activo");
-      }
-
-      // Cambiar color de texto según flor
-      const color = coloresPorFlor[fondo] || "#ffffff";
-      deEl.style.color = color;
-      paraEl.style.color = color;
-
-      index = (index + 1) % dedicatorias.length;
-    }
 
     async function cargarDatos() {
       try {
@@ -152,6 +92,21 @@
         paraEl.textContent = "al cargar datos";
         console.error(error);
       }
+    }
+
+    function mostrarDedicatoria() {
+      const item = dedicatorias[index];
+      deEl.textContent = item.de;
+      paraEl.textContent = item.para;
+      videoEl.src = BASE_URL + item.fondo; // Ruta absoluta a GitHub Pages
+      videoEl.load();
+      videoEl.play();
+
+      const color = coloresPorFlor[item.fondo.toLowerCase()] || "#ffffff";
+      deEl.style.color = color;
+      paraEl.style.color = color;
+
+      index = (index + 1) % dedicatorias.length;
     }
 
     cargarDatos();
